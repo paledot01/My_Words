@@ -95,7 +95,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	public JF_Main() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 402, 602);
+		setBounds(100, 100, 732, 562); // 660 x 600
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.GREEN);
 		contentPane.setBorder(new LineBorder(Constans.GRIS_80));
@@ -103,7 +103,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		contentPane.setLayout(null);
 		
 		pnl_superior = new JPanel();
-		pnl_superior.setBounds(1, 1, 400, 30);
+		pnl_superior.setBounds(1, 1, 730, 30);
 //		pnl_superior.setBorder(new LineBorder(Color.cyan));
 		pnl_superior.setBackground(Color.BLACK);
 		pnl_superior.addMouseMotionListener(this);
@@ -112,13 +112,13 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		contentPane.add(pnl_superior);
 		
 		pnl_strip= new JPanel();
-		pnl_strip.setBounds(1, 31, 400, 30);
+		pnl_strip.setBounds(1, 31, 730, 30);
 		pnl_strip.setBackground(Constans.GRIS_200);
 		pnl_strip.setLayout(null);
 		contentPane.add(pnl_strip);
 		
 		pnl_inferior= new JPanel();
-		pnl_inferior.setBounds(1, 571, 400, 30);
+		pnl_inferior.setBounds(1, 531, 730, 30);
 		pnl_inferior.setBackground(Constans.GRIS_200);
 		pnl_inferior.setLayout(null);
 		contentPane.add(pnl_inferior);
@@ -166,7 +166,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_superior.add(lbl_app_nombre);
 		
 		pnl_principal = new JPanel();
-		pnl_principal.setBounds(1, 61, 400, 510);
+		pnl_principal.setBounds(1, 61, 730, 470);
 		contentPane.add(pnl_principal);
 		
 		modelo = new DefaultTableModel();
@@ -215,7 +215,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		
 	// Mostrar en el panel "p" dentro del panel principal
 	static void MostrarEnPanelPrincipal(JPanel p){
-		p.setSize(400, 510);
+		p.setSize(730, 470);
 		p.setLocation(0, 0);
 		pnl_principal.removeAll();
 		pnl_principal.setLayout(null);
