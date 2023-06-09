@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.EventQueue;
 
@@ -9,40 +8,26 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 
-import model.Word;
 import service.WordService;
 import serviceImpl.WordServiceImpl;
 import utils.Constans;
 
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.event.MouseEvent;
-import java.awt.Cursor;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import java.awt.List;
 
 public class JF_Main extends JFrame implements MouseListener, ActionListener, MouseMotionListener {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel pnl_superior;
 	private JPanel pnl_inferior;
@@ -56,13 +41,11 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	private JLabel lbl_total_words;
 	
 
-	// variables 
+	// variables
 	private WordService servicio = new WordServiceImpl();
 	private int xMouse, yMouse; // PASO 1: EVENTO 'ARRASTRAR' DE LA BARRA - Creacion de la variable
-	private DefaultTableModel modelo;
-	static private double xRound = 50;
-	static private double yRound = 50;
 	static private JPanel pnl_principal;
+//	static public List<Word> lista_words = new ArrayList<Word>();
 
 
 	
@@ -113,25 +96,25 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		
 		pnl_strip= new JPanel();
 		pnl_strip.setBounds(1, 31, 730, 30);
-		pnl_strip.setBackground(Constans.GRIS_200);
+		pnl_strip.setBackground(Constans.HOJA_CREMA);
 		pnl_strip.setLayout(null);
 		contentPane.add(pnl_strip);
 		
 		pnl_inferior= new JPanel();
 		pnl_inferior.setBounds(1, 531, 730, 30);
-		pnl_inferior.setBackground(Constans.GRIS_200);
+		pnl_inferior.setBackground(Constans.HOJA_CREMA);
 		pnl_inferior.setLayout(null);
 		contentPane.add(pnl_inferior);
 		
 		lbl_total_words = new JLabel("TOTAL: 456");
-		lbl_total_words.setHorizontalAlignment(SwingConstants.RIGHT);
+		lbl_total_words.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_total_words.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbl_total_words.setBounds(288, 0, 100, 30);
+		lbl_total_words.setBounds(630, 0, 100, 30);
 		pnl_inferior.add(lbl_total_words);
 		lbl_total_words.setForeground(Color.BLACK);
 		
 		pnl_close = new JPanel();
-		pnl_close.setBounds(370, 0, 30, 30);
+		pnl_close.setBounds(700, 0, 30, 30);
 		pnl_close.addMouseListener(this);
 		pnl_close.setBackground(Color.BLACK);
 		pnl_close.setLayout(null);
@@ -143,7 +126,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_close.add(lbl_01);
 		
 		pnl_minimizar = new JPanel();
-		pnl_minimizar.setBounds(340, 0, 30, 30);
+		pnl_minimizar.setBounds(670, 0, 30, 30);
 		pnl_minimizar.addMouseListener(this);
 		pnl_minimizar.setBackground(Color.BLACK);
 		pnl_minimizar.setLayout(null);
@@ -169,16 +152,14 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_principal.setBounds(1, 61, 730, 470);
 		contentPane.add(pnl_principal);
 		
-		modelo = new DefaultTableModel();
-		modelo.addColumn("palabras");
-		modelo.addColumn("significado");
-		
-		
-		servicio.readFile();
+		System.out.println(">>> JFRAME MAIN - EJECUCION DEL CONSTRUCTOR");
+		servicio.readFile(); // antes de la creacion del PANEL
 		Pnl_Hoja pnl_hoja = new Pnl_Hoja();
 		MostrarEnPanelPrincipal(pnl_hoja);
-		listar();
-	} // ===> Fin del Constructor
+		
+		
+		
+	} // =====> Fin del Constructor
 	
 	
 	void mensajeError(String mensaje){
@@ -186,31 +167,6 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	}
 	void mensajeExito(String mensaje){
 		JOptionPane.showMessageDialog(contentPane, mensaje, "Sistema", 1);
-	}
-	
-	void listar() {
-		modelo.setRowCount(0);
-		
-		Object[] fila = {"House", "casa"};
-		Object[] fila2 = {"Hope", "esperanza"};
-		Object[] fila3 = {"House", "casa"};
-		Object[] fila4 = {"Hope", "esperanza"};
-		Object[] fila5 = {"House", "casa"};
-		Object[] fila6 = {"Hope", "esperanza"};
-		Object[] fila7 = {"House", "casa"};
-		Object[] fila8 = {"Hope", "esperanza"};
-		Object[] fila9= {"House", "casa"};
-		Object[] fila10 = {"Hope", "esperanza"};
-		modelo.addRow(fila);
-		modelo.addRow(fila2);
-		modelo.addRow(fila3);
-		modelo.addRow(fila4);
-		modelo.addRow(fila5);
-		modelo.addRow(fila6);
-		modelo.addRow(fila7);
-		modelo.addRow(fila8);
-		modelo.addRow(fila9);
-		modelo.addRow(fila10);
 	}
 		
 	// Mostrar en el panel "p" dentro del panel principal

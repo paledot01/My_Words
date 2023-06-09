@@ -9,5 +9,5 @@ public interface WordService {
 	public int save(Word w);
 	public int add(Word w);
 	public int newCode();
-	public List<Word> readFile();
+	public void readFile();
 }

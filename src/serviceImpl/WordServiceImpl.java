@@ -23,7 +23,7 @@ public class WordServiceImpl implements WordService{
 
 	// Constantes []
 	final String file = Constans.PATH_FILE;
-	List<Word> lista;
+	public static List<Word> lista_words; //
 	
 	@Override
 	public int save(Word w) {
@@ -146,9 +146,9 @@ public class WordServiceImpl implements WordService{
 	}
 
 	@Override
-	public List<Word> readFile() { // esto debe ejecutarse al inicio
+	public void readFile() { // esto debe ejecutarse al inicio
 		
-		lista = new ArrayList<>();
+		lista_words = new ArrayList<>();
 		Word obj;
 		try {
 			FileReader fr = new FileReader(file);
@@ -158,17 +158,17 @@ public class WordServiceImpl implements WordService{
 			while (br.ready()) {
 				linea = br.readLine();
 				String s[] = linea.split(";");
-				System.out.println("linea:" + linea);
+//				System.out.println("linea:" + linea);
 				obj = new Word(Integer.parseInt(s[0]), s[1], s[2], s[3], null, null, null, null);
-				lista.add(obj);
-				System.out.println(obj);
+				lista_words.add(obj);
+//				System.out.println(obj);
 			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		System.out.println("2da lista: " + lista.get(3));
-		return lista;
+		System.out.println(">>< SERVICE IMPL - LEYO EL ARCHIVO FILE");
+//		return lista;
 	}
 
 

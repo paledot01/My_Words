@@ -14,13 +14,12 @@ public class Constans {
 	public static final Color GRIS_220= new Color(220, 220, 220); // border
 	public static final Color GRIS_240= new Color(240, 240, 240); // border
 	public static final Color Oscuro_1= new Color(27, 31, 35);
-	
 	// HOJA
-	
 	public static final Color HOJA_CELESTE = new Color(186, 221, 240);
 	public static final Color HOJA_ROJO = new Color(233, 165, 157);
 	public static final Color HOJA_CREMA = new Color(255, 255, 238);
-	public static final Color HOJA_CREMA_OSCURO = new Color(242, 242, 225);
+//	public static final Color HOJA_CREMA_OSCURO = new Color(242, 242, 225);
+	public static final Color HOJA_CREMA_OSCURO = new Color(230, 230, 213);
 	
 	
 	
