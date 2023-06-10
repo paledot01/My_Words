@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import model.Word;
-import service.WordService;
 import serviceImpl.WordServiceImpl;
 import utils.Constans;
 
@@ -92,7 +91,10 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 	private JLabel[] labels = {lbl_1,lbl_2,lbl_3,lbl_4,lbl_5,lbl_6,lbl_7,lbl_8,lbl_9,lbl_10,lbl_11,lbl_12,lbl_13,lbl_14,lbl_15,lbl_16,lbl_17,lbl_18,lbl_19,lbl_20,lbl_21,lbl_22,lbl_23,lbl_24,lbl_25,lbl_26,
 			lbl_27,lbl_28,lbl_29,lbl_30,lbl_31,lbl_32,lbl_33,lbl_34,lbl_35,lbl_36,lbl_37,lbl_38,lbl_39,lbl_40,lbl_41,lbl_42,lbl_43,lbl_44,lbl_45,lbl_46,lbl_47,lbl_48,lbl_49,lbl_50,lbl_51,lbl_52,lbl_53,lbl_54,lbl_55,lbl_56,lbl_57};
 	private Font fuente = new Font("Segoe Print", Font.PLAIN, 15);
-	public int n = 1;
+
+	public int cantidadPalabras = WordServiceImpl.lista_words.size(); // cantidad de palabras
+	public int cantidadPaginas = (int)Math.ceil(cantidadPalabras/57.0);  // cantidad de paginas
+	public int paginaActual = 1; // página actual que se mostrará
 
 	/**
 	 * Create the panel.
@@ -113,43 +115,88 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 		pnl_hoja.add(pnl_principal);
 		
 		lbl_left_arrow = new JLabel("←");
-		lbl_left_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//		lbl_left_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbl_left_arrow.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_left_arrow.setFont(new Font("Segoe Print", Font.ITALIC, 22));
+		lbl_left_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbl_left_arrow.setBounds(580, 426, 40, 16);
 		lbl_left_arrow.addMouseListener(this);
+		lbl_left_arrow.setEnabled(false);
 		pnl_principal.add(lbl_left_arrow);
 		
 		lbl_right_arrow = new JLabel("→");
-		lbl_right_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//		lbl_right_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbl_right_arrow.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_right_arrow.setFont(new Font("Segoe Print", Font.ITALIC, 22));
+		lbl_right_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbl_right_arrow.setBounds(613, 402, 40, 16);
 		lbl_right_arrow.addMouseListener(this);
+		lbl_right_arrow.setEnabled(false);
 		pnl_principal.add(lbl_right_arrow);
 		
 		System.out.println("<<< JPANEL - EJECUCION DEL CONSTRUCTOR");
-		createLabels(WordServiceImpl.lista_words);
+		createLabels();
+//		fillLabels(WordServiceImpl.lista_words, 1);
+		fillLabels(1);
+		disableArrow();
 	}
 	
 
-	public void createLabels(List<Word> lista) { // Crea y llena los JLABELS
+	public void createLabels() { // Crea y llena los JLABELS
+		int l = 1; // enumeracion de Labels
 		for(int i = 0 ; i < 3; i++) {
 			for(int j = 1; j < 21; j++) {
-				labels[n-1].setFont(fuente);
-				labels[n-1].setText(lista.get(n-1).getWord());
-				labels[n-1].setBounds(90 + 215*i, -16 + j*22, 130, 19);
-				labels[n-1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				labels[n-1].addMouseListener(this);
-				pnl_principal.add(labels[n-1]);
-				System.out.println("n = " + n);
-				n++;
-				if(n > lista.size()) break;
+				labels[l-1].setFont(fuente);
+				labels[l-1].setBounds(90 + 215*i, -16 + j*22, 130, 19);
+//				labels[l-1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				labels[l-1].addMouseListener(this);
+				pnl_principal.add(labels[l-1]);
+				l++;
+				if(l > 57) break;
 			}
-			if(n > lista.size()) break;
+			if(l > 57) break;
 		}
+		System.out.println("1. Crea los Labels");
 	}
 	
+	
+	public void fillLabels(int pag) { // pagina que quieres que se muestre en los labels
+		List<Word> lista = WordServiceImpl.lista_words;
+		int n = 0 + 57*(pag-1); // enumeracion de  inicio de palabras por pagina: pag1(1), pag2(58) ...
+		for(int i = 0; i < 57; i++) {
+			labels[i].setText(lista.get(n).getWord());
+			labels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			n++;
+			if(n == cantidadPalabras) break;
+		}
+		System.out.println("2. Llena los Labels");
+	}
+	
+	
+	public void clearLabels() { // Limpia los JLabel que deben estar vacios, es decir solo a la ultima pagina, por eso no se aplica cuando retroces de pagina.
+		if(paginaActual == cantidadPaginas) {
+			int inicio = 57 - (cantidadPaginas * 57 - cantidadPalabras); // si cantidadPalabras = 58 -> inicio = 1 -> debe empezar por el 2do Label -> ES CORRECTO.
+			for(int i = inicio; i < 57; i++) {
+				labels[i].setText("");
+				labels[i].setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
+		}
+		System.out.println("3. Limpia los Labels");
+	}
+	
+	
+	public void disableArrow() {
+		if(paginaActual == 1) {
+			lbl_left_arrow.setEnabled(false);
+		} else {
+			lbl_left_arrow.setEnabled(true);
+		}
+		if(paginaActual == cantidadPaginas) {
+			lbl_right_arrow.setEnabled(false);
+		} else {
+			lbl_right_arrow.setEnabled(true);
+		}
+	}
 	
 	public void paint(Graphics hoja){ // -> El orden es importante porque los ultimos dibujos sobreenciman a los anteriores, asi como los colores y alisados.
 		
@@ -178,15 +225,15 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 		//hoja2d.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL,RenderingHints.VALUE_STROKE_PURE);
 		
 		
-		int n = 1;
 		// >>>>>>> NUMERACION <<<<<
+		int n = 1 + (paginaActual-1)*57; // cantidad de palabras: paginas
 		for(int i = 0 ; i < 3; i++) {
 			for(int j = 1; j < 21; j++) {
 				hoja2d.drawString("" + n + ".", 60 + 215*i, 10 + j*22); // x + 215
 				n++;
-				if(n > 57) break;
+				if(n > paginaActual*57) break;
 			}
-			if(n > 57) break;
+			if(n > paginaActual*57) break;
 		}
 
 		// >>>>>>> DOBLEZ DE LA HOJA - TRIANGULO INFERIOR
@@ -259,7 +306,20 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 	public void mouseClicked(MouseEvent e) {
 	}
 	@Override
-	public void mousePressed(MouseEvent e) {		
+	public void mousePressed(MouseEvent e) {
+		if (e.getSource() == lbl_right_arrow && lbl_right_arrow.isEnabled()) {
+			paginaActual++;
+			clearLabels();
+			paint(this.getGraphics());
+			fillLabels(paginaActual);
+			disableArrow();
+		}
+		if (e.getSource() == lbl_left_arrow && lbl_left_arrow.isEnabled()) {
+			paginaActual--;
+			paint(this.getGraphics());
+			fillLabels(paginaActual);
+			disableArrow();
+		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
