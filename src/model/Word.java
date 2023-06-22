@@ -10,7 +10,7 @@ public class Word {
 	private String meaning; // significado
 	private String example;
 	private String image;
-	private Integer number; // cantidad de palabras
+	//private Integer number; // cantidad de palabras
 	private String grupo; //
 	private Date date;
 	
@@ -18,27 +18,24 @@ public class Word {
 	public Word() {}
 	
 	// CON ID
-	public Word(Integer id, String word, String meaning, String example, String image, Integer number, String grupo,
-			Date date) {
+	public Word(Integer id, String word, String meaning, String example, String image, String grupo, Date date) {
 		super();
 		this.id = id;
 		this.word = word;
 		this.meaning = meaning;
 		this.example = example;
 		this.image = image;
-		this.number = number;
 		this.grupo = grupo;
 		this.date = date;
 	}
 
 	// SIN ID
-	public Word(String word, String meaning, String example, String image, Integer number, String grupo, Date date) {
+	public Word(String word, String meaning, String example, String image, String grupo, Date date) {
 		super();
 		this.word = word;
 		this.meaning = meaning;
 		this.example = example;
 		this.image = image;
-		this.number = number;
 		this.grupo = grupo;
 		this.date = date;
 	}
@@ -94,16 +91,6 @@ public class Word {
 	}
 
 
-	public Integer getNumber() {
-		return number;
-	}
-
-
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
-
-
 	public String getGrupo() {
 		return grupo;
 	}
@@ -127,7 +114,7 @@ public class Word {
 	@Override
 	public String toString() {
 		return "Word [id=" + id + ", word=" + word + ", meaning=" + meaning + ", example=" + example + ", image="
-				+ image + ", number=" + number + ", grupo=" + grupo + ", date=" + date + "]";
+				+ image + ", grupo=" + grupo + ", date=" + date + "]";
 	}
 	
 	

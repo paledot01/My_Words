@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -21,15 +22,18 @@ import java.awt.Font;
 import java.awt.GradientPaint;
 import javax.swing.SwingConstants;
 import java.awt.Cursor;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
-public class Pnl_Hoja extends JPanel implements MouseListener{
+public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeListener{
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel pnl_hoja;
 	private JPanel pnl_principal;
 	private JLabel lbl_right_arrow;
 	private JLabel lbl_left_arrow;
+	public static JLabel lbl_grupo; // <<<<<<<<<<<<<<
 
 	private JLabel lbl_1 = new JLabel("");
 	private JLabel lbl_2 = new JLabel("");
@@ -91,10 +95,13 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 	private JLabel[] labels = {lbl_1,lbl_2,lbl_3,lbl_4,lbl_5,lbl_6,lbl_7,lbl_8,lbl_9,lbl_10,lbl_11,lbl_12,lbl_13,lbl_14,lbl_15,lbl_16,lbl_17,lbl_18,lbl_19,lbl_20,lbl_21,lbl_22,lbl_23,lbl_24,lbl_25,lbl_26,
 			lbl_27,lbl_28,lbl_29,lbl_30,lbl_31,lbl_32,lbl_33,lbl_34,lbl_35,lbl_36,lbl_37,lbl_38,lbl_39,lbl_40,lbl_41,lbl_42,lbl_43,lbl_44,lbl_45,lbl_46,lbl_47,lbl_48,lbl_49,lbl_50,lbl_51,lbl_52,lbl_53,lbl_54,lbl_55,lbl_56,lbl_57};
 	private Font fuente = new Font("Segoe Print", Font.PLAIN, 15);
+	public static List<Word> lista = JF_Main.lista_words; // <<<<<<<<<<<
 
-	public int cantidadPalabras = WordServiceImpl.lista_words.size(); // cantidad de palabras
-	public int cantidadPaginas = (int)Math.ceil(cantidadPalabras/57.0);  // cantidad de paginas
-	public int paginaActual = 1; // página actual que se mostrará
+
+	//public int cantidadPalabras = WordServiceImpl.lista_words.size(); // cantidad de palabras
+	//public int cantidadPaginas = (int)Math.ceil(cantidadPalabras/57.0);  // cantidad de paginas
+	//public int paginaActual = 1; // página actual que se mostrará
+	
 
 	/**
 	 * Create the panel.
@@ -119,7 +126,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 		lbl_left_arrow.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_left_arrow.setFont(new Font("Segoe Print", Font.ITALIC, 22));
 		lbl_left_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lbl_left_arrow.setBounds(580, 426, 40, 16);
+		lbl_left_arrow.setBounds(510, 426, 45, 18);
 		lbl_left_arrow.addMouseListener(this);
 		lbl_left_arrow.setEnabled(false);
 		pnl_principal.add(lbl_left_arrow);
@@ -129,16 +136,24 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 		lbl_right_arrow.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_right_arrow.setFont(new Font("Segoe Print", Font.ITALIC, 22));
 		lbl_right_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lbl_right_arrow.setBounds(613, 402, 40, 16);
+		lbl_right_arrow.setBounds(558, 426, 45, 18);
 		lbl_right_arrow.addMouseListener(this);
 		lbl_right_arrow.setEnabled(false);
 		pnl_principal.add(lbl_right_arrow);
 		
-		System.out.println("<<< JPANEL - EJECUCION DEL CONSTRUCTOR");
+		lbl_grupo = new JLabel("ALL");
+		lbl_grupo.setForeground(Constans.HOJA_VERDE);
+		lbl_grupo.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_grupo.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
+		lbl_grupo.setBounds(478, 402, 166, 20);
+		lbl_grupo.addPropertyChangeListener(this);
+		pnl_principal.add(lbl_grupo);
+		
+//		System.out.println("<<< JPANEL [START] - EJECUCION DEL CONSTRUCTOR");
 		createLabels();
-//		fillLabels(WordServiceImpl.lista_words, 1);
-		fillLabels(1);
+		fillLabels(lista, 1); // inicia en pagina 1
 		disableArrow();
+		System.out.println("<<< JPANEL HOJA [END] - EJECUCION DEL CONSTRUCTOR");
 	}
 	
 
@@ -150,6 +165,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 				labels[l-1].setBounds(90 + 215*i, -16 + j*22, 130, 19);
 //				labels[l-1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				labels[l-1].addMouseListener(this);
+				labels[l-1].setEnabled(false);
 				pnl_principal.add(labels[l-1]);
 				l++;
 				if(l > 57) break;
@@ -160,25 +176,30 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 	}
 	
 	
-	public void fillLabels(int pag) { // pagina que quieres que se muestre en los labels
-		List<Word> lista = WordServiceImpl.lista_words;
-		int n = 0 + 57*(pag-1); // enumeracion de  inicio de palabras por pagina: pag1(1), pag2(58) ...
-		for(int i = 0; i < 57; i++) {
-			labels[i].setText(lista.get(n).getWord());
-			labels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			n++;
-			if(n == cantidadPalabras) break;
+	public void fillLabels(List<Word> l, int pag) { // llena el contenido de los JLabels - pagina que quieres que se muestre en los labels
+//		List<Word> lista = JF_Main.lista_words;
+		
+		if(JF_Main.cantidad_palabras != 0) {
+			int n = 0 + 57*(pag-1); // enumeracion de  inicio de palabras por pagina: pag1(1), pag2(58) ...
+			for(int i = 0; i < 57; i++) {
+				labels[i].setText(lista.get(n).getWord());
+				labels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				labels[i].setEnabled(true);
+				n++;
+				if(n == JF_Main.cantidad_palabras) break;
+			}
 		}
 		System.out.println("2. Llena los Labels");
 	}
 	
 	
 	public void clearLabels() { // Limpia los JLabel que deben estar vacios, es decir solo a la ultima pagina, por eso no se aplica cuando retroces de pagina.
-		if(paginaActual == cantidadPaginas) {
-			int inicio = 57 - (cantidadPaginas * 57 - cantidadPalabras); // si cantidadPalabras = 58 -> inicio = 1 -> debe empezar por el 2do Label -> ES CORRECTO.
+		if(JF_Main.pagina_actual == JF_Main.cantidad_paginas) {
+			int inicio = 57 - (JF_Main.cantidad_paginas * 57 - JF_Main.cantidad_palabras); // si cantidadPalabras = 58 -> inicio = 1 -> debe empezar por el 2do Label -> ES CORRECTO.
 			for(int i = inicio; i < 57; i++) {
 				labels[i].setText("");
 				labels[i].setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				labels[i].setEnabled(false);
 			}
 		}
 		System.out.println("3. Limpia los Labels");
@@ -186,16 +207,17 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 	
 	
 	public void disableArrow() {
-		if(paginaActual == 1) {
+		if(JF_Main.pagina_actual == 1) {
 			lbl_left_arrow.setEnabled(false);
 		} else {
 			lbl_left_arrow.setEnabled(true);
 		}
-		if(paginaActual == cantidadPaginas) {
+		if(JF_Main.pagina_actual == JF_Main.cantidad_paginas) {
 			lbl_right_arrow.setEnabled(false);
 		} else {
 			lbl_right_arrow.setEnabled(true);
 		}
+		System.out.println("4. Desabilita las flechas");
 	}
 	
 	public void paint(Graphics hoja){ // -> El orden es importante porque los ultimos dibujos sobreenciman a los anteriores, asi como los colores y alisados.
@@ -226,14 +248,15 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 		
 		
 		// >>>>>>> NUMERACION <<<<<
-		int n = 1 + (paginaActual-1)*57; // cantidad de palabras: paginas
+		int n = 1 + (JF_Main.pagina_actual-1)*57; // inicio de la enumeracion, pag 1 = 1, pag 2 = 58. Hasta el maximo de palabras o el fin de la pagina.
 		for(int i = 0 ; i < 3; i++) {
 			for(int j = 1; j < 21; j++) {
 				hoja2d.drawString("" + n + ".", 60 + 215*i, 10 + j*22); // x + 215
 				n++;
-				if(n > paginaActual*57) break;
+				if(n > JF_Main.cantidad_palabras || n > JF_Main.pagina_actual*57) break;
+//				if(n > JF_Main.pagina_actual*57) break;
 			}
-			if(n > paginaActual*57) break;
+			if(n > JF_Main.cantidad_palabras || n > JF_Main.pagina_actual*57) break;
 		}
 
 		// >>>>>>> DOBLEZ DE LA HOJA - TRIANGULO INFERIOR
@@ -299,6 +322,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 		}
 		
 		System.out.println(">>> JPANEL - EJECUCION DEL METODO PAINT");
+		
 	}
 
 
@@ -308,17 +332,25 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (e.getSource() == lbl_right_arrow && lbl_right_arrow.isEnabled()) {
-			paginaActual++;
+			JF_Main.pagina_actual++;
 			clearLabels();
-			paint(this.getGraphics());
-			fillLabels(paginaActual);
+			paint(this.getGraphics()); // repinta los numeros
+			fillLabels(lista, JF_Main.pagina_actual);
 			disableArrow();
 		}
 		if (e.getSource() == lbl_left_arrow && lbl_left_arrow.isEnabled()) {
-			paginaActual--;
+			JF_Main.pagina_actual--;
 			paint(this.getGraphics());
-			fillLabels(paginaActual);
+			fillLabels(lista, JF_Main.pagina_actual);
 			disableArrow();
+		}
+		for(int i=0; i<57; i++) {
+			if (e.getSource() == labels[i] && labels[i].isEnabled()) {
+				Dlg_DetailWord.posicionPalabra = (JF_Main.pagina_actual-1)*57 + i;
+				Dlg_DetailWord detallePalabra = new Dlg_DetailWord();
+				detallePalabra.setLocationRelativeTo(pnl_principal);
+				detallePalabra.setVisible(true);
+			}
 		}
 	}
 	@Override
@@ -333,7 +365,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 			lbl_left_arrow.setForeground(Color.RED);
 		}
 		for(int i=0; i<57; i++) {
-			if (e.getSource() == labels[i]) labels[i].setForeground(Color.RED);
+			if (e.getSource() == labels[i]) labels[i].setForeground(Constans.HOJA_ROJO2);
 		}
 	}
 	@Override
@@ -345,12 +377,20 @@ public class Pnl_Hoja extends JPanel implements MouseListener{
 			lbl_left_arrow.setForeground(Color.BLACK);
 		}
 		for(int i=0; i<57; i++) {
-			if (e.getSource() == labels[i]) labels[i].setForeground(Color.BLACK);;
+			if (e.getSource() == labels[i]) labels[i].setForeground(Color.BLACK);
 		}
 		
 	}
-	
-	
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+		if (e.getSource() == lbl_grupo && e.getPropertyName().equals("text")) { // Se activa solo con el evento de modificacion de texto.
+			clearLabels();
+			paint(this.getGraphics());
+			fillLabels(lista, JF_Main.pagina_actual);
+			disableArrow();
+			System.out.println("Pnl_Hoja : evento_cambiado -> " + e.getPropertyName());
+		}
+	}
 }
 
 

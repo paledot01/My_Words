@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
+import model.Word;
 import service.WordService;
 import serviceImpl.WordServiceImpl;
 import utils.Constans;
@@ -18,12 +19,15 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.MouseEvent;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.JButton;
 
 public class JF_Main extends JFrame implements MouseListener, ActionListener, MouseMotionListener {
 
@@ -39,15 +43,24 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	private JLabel lbl_03;
 	private JLabel lbl_app_nombre;
 	private JLabel lbl_total_words;
+	private Pnl_Hoja pnl_hoja;
 	
 
 	// variables
 	private WordService servicio = new WordServiceImpl();
 	private int xMouse, yMouse; // PASO 1: EVENTO 'ARRASTRAR' DE LA BARRA - Creacion de la variable
+	
+	// variables estaticas.
+	static public List<Word> lista_words = new ArrayList<Word>(); // su valor se obtiene en el metodo readFile(), del servicio.
+	static public List<Word> lista_words_grupo_01 = new ArrayList<Word>();
+	static public List<Word> lista_words_grupo_02 = new ArrayList<Word>();
+	static public int cantidad_palabras = 0; // Requiere verificacion.
+	static public int cantidad_paginas = 1;
+	static public int pagina_actual = 1;
+	
 	static private JPanel pnl_principal;
-//	static public List<Word> lista_words = new ArrayList<Word>();
-
-
+	private JButton btn_grupo01;
+	private JButton btn_grupo02;
 	
 	
 	/**
@@ -97,8 +110,22 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_strip= new JPanel();
 		pnl_strip.setBounds(1, 31, 730, 30);
 		pnl_strip.setBackground(Constans.HOJA_CREMA);
-		pnl_strip.setLayout(null);
 		contentPane.add(pnl_strip);
+		pnl_strip.setLayout(null);
+		
+		btn_grupo01 = new JButton("");
+		btn_grupo01.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_1.png")));
+		btn_grupo01.addActionListener(this);
+		btn_grupo01.setFocusable(false);
+		btn_grupo01.setBounds(1, 1, 28, 28);
+		pnl_strip.add(btn_grupo01);
+		
+		btn_grupo02 = new JButton("");
+		btn_grupo02.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_2.png")));
+		btn_grupo02.addActionListener(this);
+		btn_grupo02.setFocusable(false);
+		btn_grupo02.setBounds(30, 1, 28, 28);
+		pnl_strip.add(btn_grupo02);
 		
 		pnl_inferior= new JPanel();
 		pnl_inferior.setBounds(1, 531, 730, 30);
@@ -106,7 +133,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_inferior.setLayout(null);
 		contentPane.add(pnl_inferior);
 		
-		lbl_total_words = new JLabel("TOTAL: 456");
+		lbl_total_words = new JLabel(""); // <<<<<<<<<<<<<<<<<<
 		lbl_total_words.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_total_words.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lbl_total_words.setBounds(630, 0, 100, 30);
@@ -140,7 +167,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		lbl_03 = new JLabel("");
 		lbl_03.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_03.setBounds(0, 0, 30, 30);
-		lbl_03.setIcon(new ImageIcon(JF_Main.class.getResource("/img/close.png")));
+		lbl_03.setIcon(new ImageIcon(JF_Main.class.getResource("/img/logo_white_20.png")));
 		pnl_superior.add(lbl_03);
 		
 		lbl_app_nombre = new JLabel("My Words");
@@ -152,16 +179,25 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_principal.setBounds(1, 61, 730, 470);
 		contentPane.add(pnl_principal);
 		
-		System.out.println(">>> JFRAME MAIN - EJECUCION DEL CONSTRUCTOR");
-		servicio.readFile(); // antes de la creacion del PANEL
-		Pnl_Hoja pnl_hoja = new Pnl_Hoja();
+		
+
+		// ACCIONES INICIALES
+		servicio.readFile(); // obtenemos la lista de palabras
+		getCantidadPalabras(lista_words);
+		getCantidadPaginas(lista_words);
+		setTotalPalabras();
+		
+		pnl_hoja = new Pnl_Hoja();
 		MostrarEnPanelPrincipal(pnl_hoja);
+
 		
-		
+		System.out.println(">>> JFRAME MAIN [END] - EJECUCION DEL CONSTRUCTOR");
 		
 	} // =====> Fin del Constructor
+
 	
 	
+
 	void mensajeError(String mensaje){
 		JOptionPane.showMessageDialog(contentPane, mensaje, "Error", 0);
 	}
@@ -169,19 +205,34 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		JOptionPane.showMessageDialog(contentPane, mensaje, "Sistema", 1);
 	}
 		
+	void getCantidadPalabras(List<Word> list) {
+		cantidad_palabras = list.size();
+	}
+	
+	void getCantidadPaginas(List<Word> list) { // NO PUEDE SER 0
+		cantidad_paginas = (int) Math.ceil(cantidad_palabras/57.0);
+		if(cantidad_paginas == 0) cantidad_paginas = 1;
+	}
+	
+	void setTotalPalabras(){
+//		String total = Integer.toString(cantidad_palabras);
+		lbl_total_words.setText("Total: " + cantidad_palabras + " words");
+	}
+	
 	// Mostrar en el panel "p" dentro del panel principal
 	static void MostrarEnPanelPrincipal(JPanel p){
+
 		p.setSize(730, 470);
 		p.setLocation(0, 0);
 		pnl_principal.removeAll();
 		pnl_principal.setLayout(null);
 		pnl_principal.add(p);
-		pnl_principal.revalidate();
-		pnl_principal.repaint();
+//		pnl_principal.revalidate();
+//		pnl_principal.repaint();
 	}
 	
 
-	// =======================================
+	// ===========================================
 	public void mouseClicked(MouseEvent e) {
 	}
 	public void mouseEntered(MouseEvent e) {
@@ -214,7 +265,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	}
 	public void mouseReleased(MouseEvent e) {
 	}
-	// ========================================
+	// ============================================
 	public void mouseDragged(MouseEvent e) { // PASO 3: EVENTO 'ARRASTRAR' DE LA BARRA - EVENTO ARRASTRAR
 		if (e.getSource() == pnl_superior) {
 			int x = e.getXOnScreen();  
@@ -224,7 +275,24 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	}
 	public void mouseMoved(MouseEvent e) {
 	}
-	// =======================================
+	// ============================================
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btn_grupo01) {
+			getCantidadPalabras(lista_words_grupo_01);
+			getCantidadPaginas(lista_words_grupo_01);
+			pagina_actual = 1;
+			Pnl_Hoja.lista = lista_words_grupo_01;
+			Pnl_Hoja.lbl_grupo.setText("GRUPO I");
+			System.out.println("JF_Main: evento change");
+		}
+		if (e.getSource() == btn_grupo02) {
+			getCantidadPalabras(lista_words_grupo_02);
+			getCantidadPaginas(lista_words_grupo_02);
+			pagina_actual = 1;
+			Pnl_Hoja.lista = lista_words_grupo_02;
+			Pnl_Hoja.lbl_grupo.setText("GRUPO II");
+			System.out.println("JF_Main: evento change");
+		}
 	}
+
 }
