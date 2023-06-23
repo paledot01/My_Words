@@ -161,12 +161,13 @@ public class WordServiceImpl implements WordService{
 //				System.out.println("linea:" + linea);
 				obj = new Word(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5], null);
 				JF_Main.lista_words.add(obj);
-				if(s[5].equals("g1")) {
-					JF_Main.lista_words_grupo_01.add(obj);
+				switch (s[5]) {
+				case "g1":JF_Main.lista_words_grupo_01.add(obj);break;
+				case "g2":JF_Main.lista_words_grupo_02.add(obj);break;
+				case "g3":JF_Main.lista_words_grupo_03.add(obj);break;
+				case "g4":JF_Main.lista_words_grupo_04.add(obj);break;
+				case "g5":JF_Main.lista_words_grupo_05.add(obj);break;
 				}
-				if(s[5].equals("g2")) {
-					JF_Main.lista_words_grupo_02.add(obj);
-				}	
 				
 //				System.out.println(obj);
 			}

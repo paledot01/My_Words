@@ -34,6 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import java.awt.Cursor;
+import java.awt.Desktop;
 
 public class Dlg_DetailWord extends JDialog implements MouseListener {
 
@@ -51,6 +52,7 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 	public static int posicionPalabra = 0;
 	private Word palabra;
 	private String pathImage;
+	private JLabel lbl_zoom;
 //	private String imagen2 = "C:/MyWords/imgs/fetch.jpg";
 	
 
@@ -102,7 +104,15 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 		lbl_ejemplo.setBounds(17, 43, 280, 51);
 		panel.add(lbl_ejemplo);
 		
+		lbl_zoom = new JLabel("");
+		lbl_zoom.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_zoom.addMouseListener(this);
+		lbl_zoom.setIcon(new ImageIcon(Dlg_DetailWord.class.getResource("/img/zoom_0.png")));
+		lbl_zoom.setBounds(276, 98, 19, 19);
+		panel.add(lbl_zoom);
+		
 		lbl_imagen = new JLabel("");
+		lbl_imagen.setBorder(new LineBorder(new Color(187, 200, 212)));
 		lbl_imagen.setBounds(16, 97, 280, 280);
 		lbl_imagen.setIcon(new ImageIcon(Dlg_DetailWord.class.getResource("/img/no_image.png"))); // <<<<<<
 		panel.add(lbl_imagen);
@@ -132,7 +142,7 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 		setTitle(palabra.getWord()); // <<<<<<<<<<<<<<< 1
 	}
 	
-	// >>> Modifica la Imagen si existe y lo redimenciona solo si es necesario.
+	// >>> Modifica la Imagen si existe y lo redimenciona solo si es necesario. si no hay imagen no modifica nada y vuelve invisible el zoom.
 	public void setImage(String rutaImagen) { // BufferedImage extiende de image.
 		Image imagen = null;
 		BufferedImage imagenOriginal = null;
@@ -155,7 +165,8 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 			lbl_imagen.setIcon(new ImageIcon(imagen));
 		} catch (IOException e) {
 //			e.printStackTrace();
-			System.out.println("Error en el metodo SerImage(): --> " + e.getMessage());
+			System.out.println("Error en el metodo SetImage(): --> " + e.getMessage());
+			lbl_zoom.setVisible(false); // oculta el boton de zoom.
 		}
 	}
 	
@@ -195,6 +206,17 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 		lbl_ejemplo.setText(newFrase);
 		
 	}
+	
+	void openImage() { // abre la imagen en Windows
+		File f = new File(pathImage);
+		
+	    Desktop dt = Desktop.getDesktop();
+	    try {
+			dt.open(f);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
 
 	
 	// ============================  EVENTOS  ===================================
@@ -203,6 +225,9 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(e.getSource() == lbl_zoom) {
+			openImage();
+		}
 		if (e.getSource() == lbl_significado) {
 			lbl_significado.setText(palabra.getMeaning());
 		}
@@ -212,18 +237,22 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() == lbl_zoom) {
+			lbl_zoom.setIcon(new ImageIcon(Dlg_DetailWord.class.getResource("/img/zoom_1.png")));
+		}
 		if (e.getSource() == lbl_significado) {
 			lbl_significado.setForeground(Color.RED);
 		}
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
+		if(e.getSource() == lbl_zoom) {
+			lbl_zoom.setIcon(new ImageIcon(Dlg_DetailWord.class.getResource("/img/zoom_0.png")));
+		}
 		if (e.getSource() == lbl_significado) {
 			lbl_significado.setForeground(Color.BLACK);
 		}		
 	}
-	
-	
 }
 
 

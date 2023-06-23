@@ -44,23 +44,33 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	private JLabel lbl_app_nombre;
 	private JLabel lbl_total_words;
 	private Pnl_Hoja pnl_hoja;
-	
+	private JButton btn_grupo00;
+	private JButton btn_grupo01;
+	private JButton btn_grupo02;
+	private JButton btn_grupo03;
+	private JButton btn_grupo04;
+	private JButton btn_grupo05;
 
 	// variables
 	private WordService servicio = new WordServiceImpl();
 	private int xMouse, yMouse; // PASO 1: EVENTO 'ARRASTRAR' DE LA BARRA - Creacion de la variable
 	
 	// variables estaticas.
-	static public List<Word> lista_words = new ArrayList<Word>(); // su valor se obtiene en el metodo readFile(), del servicio.
+	static public List<Word> lista_words = new ArrayList<Word>(); // lista grupo 0, su valor se obtiene en el metodo readFile(), del servicio.
 	static public List<Word> lista_words_grupo_01 = new ArrayList<Word>();
 	static public List<Word> lista_words_grupo_02 = new ArrayList<Word>();
+	static public List<Word> lista_words_grupo_03 = new ArrayList<Word>();
+	static public List<Word> lista_words_grupo_04 = new ArrayList<Word>();
+	static public List<Word> lista_words_grupo_05 = new ArrayList<Word>();
 	static public int cantidad_palabras = 0; // Requiere verificacion.
 	static public int cantidad_paginas = 1;
 	static public int pagina_actual = 1;
 	
 	static private JPanel pnl_principal;
-	private JButton btn_grupo01;
-	private JButton btn_grupo02;
+	
+	private int grupoActual = 0; // para saber que grupo es el que se esta mostrando en la pantalla principal.
+
+
 	
 	
 	/**
@@ -113,19 +123,47 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		contentPane.add(pnl_strip);
 		pnl_strip.setLayout(null);
 		
+		btn_grupo00 = new JButton("");
+		btn_grupo00.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_0.png")));
+		btn_grupo00.addActionListener(this);
+		btn_grupo00.setFocusable(false);
+		btn_grupo00.setBounds(1, 1, 28, 28);
+		pnl_strip.add(btn_grupo00);
+		
 		btn_grupo01 = new JButton("");
 		btn_grupo01.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_1.png")));
 		btn_grupo01.addActionListener(this);
 		btn_grupo01.setFocusable(false);
-		btn_grupo01.setBounds(1, 1, 28, 28);
+		btn_grupo01.setBounds(29, 1, 28, 28);
 		pnl_strip.add(btn_grupo01);
 		
 		btn_grupo02 = new JButton("");
 		btn_grupo02.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_2.png")));
 		btn_grupo02.addActionListener(this);
 		btn_grupo02.setFocusable(false);
-		btn_grupo02.setBounds(30, 1, 28, 28);
+		btn_grupo02.setBounds(57, 1, 28, 28);
 		pnl_strip.add(btn_grupo02);
+		
+		btn_grupo03 = new JButton("");
+		btn_grupo03.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_3.png")));
+		btn_grupo03.addActionListener(this);
+		btn_grupo03.setFocusable(false);
+		btn_grupo03.setBounds(85, 1, 28, 28);
+		pnl_strip.add(btn_grupo03);
+		
+		btn_grupo04 = new JButton("");
+		btn_grupo04.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_4.png")));
+		btn_grupo04.addActionListener(this);
+		btn_grupo04.setFocusable(false);
+		btn_grupo04.setBounds(113, 1, 28, 28);
+		pnl_strip.add(btn_grupo04);
+		
+		btn_grupo05 = new JButton("");
+		btn_grupo05.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_5.png")));
+		btn_grupo05.addActionListener(this);
+		btn_grupo05.setFocusable(false);
+		btn_grupo05.setBounds(141, 1, 28, 28);
+		pnl_strip.add(btn_grupo05);
 		
 		pnl_inferior= new JPanel();
 		pnl_inferior.setBounds(1, 531, 730, 30);
@@ -277,21 +315,59 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	}
 	// ============================================
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btn_grupo01) {
+		if (e.getSource() == btn_grupo00 && grupoActual != 0) {
+			getCantidadPalabras(lista_words);
+			getCantidadPaginas(lista_words);
+			pagina_actual = 1;
+			Pnl_Hoja.lista = lista_words;
+			Pnl_Hoja.lbl_grupo.setText("ALL");
+			System.out.println("JF_Main: evento change");
+			grupoActual = 0;
+		}
+		if (e.getSource() == btn_grupo01 && grupoActual != 1) {
 			getCantidadPalabras(lista_words_grupo_01);
 			getCantidadPaginas(lista_words_grupo_01);
 			pagina_actual = 1;
 			Pnl_Hoja.lista = lista_words_grupo_01;
 			Pnl_Hoja.lbl_grupo.setText("GRUPO I");
 			System.out.println("JF_Main: evento change");
+			grupoActual = 1;
 		}
-		if (e.getSource() == btn_grupo02) {
+		if (e.getSource() == btn_grupo02 && grupoActual != 2) {
 			getCantidadPalabras(lista_words_grupo_02);
 			getCantidadPaginas(lista_words_grupo_02);
 			pagina_actual = 1;
 			Pnl_Hoja.lista = lista_words_grupo_02;
 			Pnl_Hoja.lbl_grupo.setText("GRUPO II");
 			System.out.println("JF_Main: evento change");
+			grupoActual = 2;
+		}
+		if (e.getSource() == btn_grupo03 && grupoActual != 3) {
+			getCantidadPalabras(lista_words_grupo_03);
+			getCantidadPaginas(lista_words_grupo_03);
+			pagina_actual = 1;
+			Pnl_Hoja.lista = lista_words_grupo_03;
+			Pnl_Hoja.lbl_grupo.setText("GRUPO III");
+			System.out.println("JF_Main: evento change");
+			grupoActual = 3;
+		}
+		if (e.getSource() == btn_grupo04 && grupoActual != 4) {
+			getCantidadPalabras(lista_words_grupo_04);
+			getCantidadPaginas(lista_words_grupo_04);
+			pagina_actual = 1;
+			Pnl_Hoja.lista = lista_words_grupo_04;
+			Pnl_Hoja.lbl_grupo.setText("GRUPO IV");
+			System.out.println("JF_Main: evento change");
+			grupoActual = 4;
+		}
+		if (e.getSource() == btn_grupo05 && grupoActual != 5) {
+			getCantidadPalabras(lista_words_grupo_05);
+			getCantidadPaginas(lista_words_grupo_05);
+			pagina_actual = 1;
+			Pnl_Hoja.lista = lista_words_grupo_05;
+			Pnl_Hoja.lbl_grupo.setText("GRUPO V");
+			System.out.println("JF_Main: evento change");
+			grupoActual = 5;
 		}
 	}
 

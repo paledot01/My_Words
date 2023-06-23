@@ -1,8 +1,8 @@
 # My Words
-Aplicación de escritorio que permite registrar y gestionar palabras. El objetivo principal es que el usuario llegue reconocer el significado de "sus palabras" registradas sin llegar a verlas.
+Aplicación de escritorio que permite registrar y gestionar palabras. El objetivo principal es que el usuario reconosca el significado de "sus palabras" sin llegar a verlas.
 
 #### Importante
-- No utiliza base de datos, en su remplazo utilizara un archivo "file.txt" para almacenar tanto la configuración del programa asi como todas las palabras registradas.
+- No utiliza base de datos, en su remplazo usa un archivo "file.txt" para almacenar tanto la configuración del programa asi como todas las palabras registradas.
 - Debe crear la carpeta "MyWords" con la siguiente distribución:
 
 ```
@@ -35,6 +35,7 @@ C:/
 - **JDK 17**
 - **Spring Tool Suite 4** como IDE principal para el desarrollo del sistema.
 - **Corel Draw** para la creación y modificación de iconos.
+- **Pixelorama** para la creación y modificación de iconos muy pequeños.
 - **Visual Studio Code** para la edición de este README.md.
 - **Git Bash** para subir y actualizar este repositorio.
 
