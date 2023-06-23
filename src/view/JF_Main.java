@@ -134,9 +134,9 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		contentPane.add(pnl_inferior);
 		
 		lbl_total_words = new JLabel(""); // <<<<<<<<<<<<<<<<<<
-		lbl_total_words.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_total_words.setHorizontalAlignment(SwingConstants.RIGHT);
 		lbl_total_words.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbl_total_words.setBounds(630, 0, 100, 30);
+		lbl_total_words.setBounds(600, 0, 120, 30);
 		pnl_inferior.add(lbl_total_words);
 		lbl_total_words.setForeground(Color.BLACK);
 		
