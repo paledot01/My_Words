@@ -24,7 +24,8 @@ public class WordServiceImpl implements WordService{
 
 	// Constantes []
 	final String file = Constans.PATH_FILE;
-//	public static List<Word> lista_words = new ArrayList<>(); //
+
+	
 	
 	@Override
 	public int save(Word w) {
@@ -147,8 +148,6 @@ public class WordServiceImpl implements WordService{
 	
 	@Override
 	public void readFile() { // esto debe ejecutarse al inicio
-		
-//		lista_words = new ArrayList<>();
 		Word obj;
 		try {
 			FileReader fr = new FileReader(file);
@@ -159,8 +158,8 @@ public class WordServiceImpl implements WordService{
 				linea = br.readLine();
 				String s[] = linea.split(";");
 //				System.out.println("linea:" + linea);
-				obj = new Word(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5], null);
-				JF_Main.lista_words.add(obj);
+				obj = new Word(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5], null, Integer.parseInt(s[7]));
+//				JF_Main.lista_words.add(obj);
 				switch (s[5]) {
 				case "g1":JF_Main.lista_words_grupo_01.add(obj);break;
 				case "g2":JF_Main.lista_words_grupo_02.add(obj);break;
@@ -168,20 +167,14 @@ public class WordServiceImpl implements WordService{
 				case "g4":JF_Main.lista_words_grupo_04.add(obj);break;
 				case "g5":JF_Main.lista_words_grupo_05.add(obj);break;
 				}
-				
-//				System.out.println(obj);
 			}
-//			System.out.println(lista_words.size() + "");
-			
 		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
 			System.out.println("ERROR AL ENCONTRAR EL ARCHIVO - en el metodo readFile(): " + e.getMessage());
 		} catch (Exception e) {
 //			e.printStackTrace();
 			System.out.println("ERROR en el metodo readFile(): " + e.getMessage());
 		}
 		System.out.println(">>< SERVICE IMPL - LEYO EL ARCHIVO FILE");
-//		return lista;
 	}
 
 

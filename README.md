@@ -12,14 +12,21 @@ C:/
     └── file.txt
 ```
 - Las imagenes se guardaran en la pc del usuario, en la carpeta "imgs".
-- Ejemplo de palabras registradas en "file.txt", el cual debe tener el siguiente orden: [ codigo, palabra, significado, ejemplo, nombre_de_su_imagen, grupo_al_que_pertenecerá (g1,g2,g3,...) ]
+- Ejemplo de palabras registradas en "file.txt", el cual debe tener el siguiente orden: [ codigo, palabra, significado, ejemplo, nombre_de_su_imagen, grupo_al_que_pertenecerá (g1,g2,g3,...), null, prioridad(0=sin prioridad,1=con prioridad). ]
 ```
-1;House;Casa;Ejemplo relacionado con casa.;House.jpg;g1
-2;Mouse;Raton;Myckey mouse.;Mouse.png;g1
+1;House;Casa;Ejemplo relacionado con casa.;House.jpg;g1;null;0
+2;Mouse;Raton;Myckey mouse.;Mouse.png;g2;null;1
 ```
 
 
 ## 1era Version
+Tareas realizadas:
+- Diseño de una "Hoja de papel" en la ventana principal atraves de código.
+- Creacion de un logo para el proyecto.
+- Obtencion de las palabras del archivo "file.txt", y visualizacion de las mismas atraves de páginas.
+- Ventana para mostrar los detalles de cualquier palabra.
+- Separacion lógica de las palabras atraves de grupos. 
+- Resaltado de las palabras que tienen la prioridad.
 
 | Imagen 1 | Imagen 2 | Imagen 3 |
 | ------------- |:-------------:| :-----:|

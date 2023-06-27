@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+import javax.swing.text.AttributeSet.ColorAttribute;
 
 import model.Word;
 import serviceImpl.WordServiceImpl;
@@ -92,17 +93,14 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 	private JLabel lbl_55 = new JLabel("");
 	private JLabel lbl_56 = new JLabel("");
 	private JLabel lbl_57 = new JLabel("");
-	private JLabel[] labels = {lbl_1,lbl_2,lbl_3,lbl_4,lbl_5,lbl_6,lbl_7,lbl_8,lbl_9,lbl_10,lbl_11,lbl_12,lbl_13,lbl_14,lbl_15,lbl_16,lbl_17,lbl_18,lbl_19,lbl_20,lbl_21,lbl_22,lbl_23,lbl_24,lbl_25,lbl_26,
-			lbl_27,lbl_28,lbl_29,lbl_30,lbl_31,lbl_32,lbl_33,lbl_34,lbl_35,lbl_36,lbl_37,lbl_38,lbl_39,lbl_40,lbl_41,lbl_42,lbl_43,lbl_44,lbl_45,lbl_46,lbl_47,lbl_48,lbl_49,lbl_50,lbl_51,lbl_52,lbl_53,lbl_54,lbl_55,lbl_56,lbl_57};
-	private Font fuente = new Font("Segoe Print", Font.PLAIN, 15);
-	public static List<Word> lista = JF_Main.lista_words; // <<<<<<<<<<<
-
-
-	//public int cantidadPalabras = WordServiceImpl.lista_words.size(); // cantidad de palabras
-	//public int cantidadPaginas = (int)Math.ceil(cantidadPalabras/57.0);  // cantidad de paginas
-	//public int paginaActual = 1; // página actual que se mostrará
+	private JLabel[] labels = {lbl_1,lbl_2,lbl_3,lbl_4,lbl_5,lbl_6,lbl_7,lbl_8,lbl_9,lbl_10,lbl_11,lbl_12,lbl_13,lbl_14,lbl_15,lbl_16,lbl_17,lbl_18,lbl_19,lbl_20,lbl_21,lbl_22,lbl_23,lbl_24,lbl_25,lbl_26,lbl_27,lbl_28,lbl_29,lbl_30,lbl_31,lbl_32,lbl_33,lbl_34,lbl_35,lbl_36,lbl_37,lbl_38,lbl_39,lbl_40,lbl_41,lbl_42,lbl_43,lbl_44,lbl_45,lbl_46,lbl_47,lbl_48,lbl_49,lbl_50,lbl_51,lbl_52,lbl_53,lbl_54,lbl_55,lbl_56,lbl_57};
 	
+	private Font fuente = new Font("Segoe Print", Font.PLAIN, 15);
+	public static List<Word> lista = JF_Main.lista_words_grupo_01; // << lista para llenar la hoja, muestra inicialmente el grupo 1
+	public static List<Integer> labelsResaltados  = new ArrayList<Integer>();; // << guarda la pocision de los JLabels importantes (para cambiarlos de color)
 
+
+	
 	/**
 	 * Create the panel.
 	 */
@@ -122,7 +120,6 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 		pnl_hoja.add(pnl_principal);
 		
 		lbl_left_arrow = new JLabel("←");
-//		lbl_left_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbl_left_arrow.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_left_arrow.setFont(new Font("Segoe Print", Font.ITALIC, 22));
 		lbl_left_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -132,7 +129,6 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 		pnl_principal.add(lbl_left_arrow);
 		
 		lbl_right_arrow = new JLabel("→");
-//		lbl_right_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbl_right_arrow.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_right_arrow.setFont(new Font("Segoe Print", Font.ITALIC, 22));
 		lbl_right_arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -141,7 +137,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 		lbl_right_arrow.setEnabled(false);
 		pnl_principal.add(lbl_right_arrow);
 		
-		lbl_grupo = new JLabel("ALL");
+		lbl_grupo = new JLabel("GRUPO I");
 		lbl_grupo.setForeground(Constans.HOJA_VERDE);
 		lbl_grupo.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_grupo.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
@@ -149,7 +145,6 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 		lbl_grupo.addPropertyChangeListener(this);
 		pnl_principal.add(lbl_grupo);
 		
-//		System.out.println("<<< JPANEL [START] - EJECUCION DEL CONSTRUCTOR");
 		createLabels();
 		fillLabels(lista, 1); // inicia en pagina 1
 		disableArrow();
@@ -163,7 +158,6 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 			for(int j = 1; j < 21; j++) {
 				labels[l-1].setFont(fuente);
 				labels[l-1].setBounds(90 + 215*i, -16 + j*22, 130, 19);
-//				labels[l-1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				labels[l-1].addMouseListener(this);
 				labels[l-1].setEnabled(false);
 				pnl_principal.add(labels[l-1]);
@@ -176,15 +170,20 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 	}
 	
 	
-	public void fillLabels(List<Word> l, int pag) { // llena el contenido de los JLabels - pagina que quieres que se muestre en los labels
-//		List<Word> lista = JF_Main.lista_words;
-		
+	public void fillLabels(List<Word> l, int pag) { // llena el contenido de los JLabels y los colorean dependiendo de su prioridad - pagina que quieres que se muestre en los labels
 		if(JF_Main.cantidad_palabras != 0) {
 			int n = 0 + 57*(pag-1); // enumeracion de  inicio de palabras por pagina: pag1(1), pag2(58) ...
+			labelsResaltados.clear(); // limpia la lista de JLabel importantes
 			for(int i = 0; i < 57; i++) {
 				labels[i].setText(lista.get(n).getWord());
 				labels[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				labels[i].setEnabled(true);
+				if(lista.get(n).getValue() == 1) {
+					labels[i].setForeground(Constans.HOJA_MORADO);
+					labelsResaltados.add(i);
+				} else {
+					labels[i].setForeground(Color.BLACK);
+				}
 				n++;
 				if(n == JF_Main.cantidad_palabras) break;
 			}
@@ -254,7 +253,6 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 				hoja2d.drawString("" + n + ".", 60 + 215*i, 10 + j*22); // x + 215
 				n++;
 				if(n > JF_Main.cantidad_palabras || n > JF_Main.pagina_actual*57) break;
-//				if(n > JF_Main.pagina_actual*57) break;
 			}
 			if(n > JF_Main.cantidad_palabras || n > JF_Main.pagina_actual*57) break;
 		}
@@ -345,11 +343,17 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 			disableArrow();
 		}
 		for(int i=0; i<57; i++) {
-			if (e.getSource() == labels[i] && labels[i].isEnabled()) {
-				Dlg_DetailWord.posicionPalabra = (JF_Main.pagina_actual-1)*57 + i;
-				Dlg_DetailWord detallePalabra = new Dlg_DetailWord();
-				detallePalabra.setLocationRelativeTo(pnl_principal);
-				detallePalabra.setVisible(true);
+			if (e.getSource() == labels[i] && labels[i].isEnabled()) { // se desabilita para que los labels vacios no funcionen.
+				if(e.getButton() == MouseEvent.BUTTON1) { // BUTTON1 (izquierda) BUTTON2 (medio) BUTTON3(derecha)
+					Dlg_DetailWord.posicionPalabra = (JF_Main.pagina_actual-1)*57 + i;
+					Dlg_DetailWord detallePalabra = new Dlg_DetailWord();
+					detallePalabra.setLocationRelativeTo(pnl_principal);
+					detallePalabra.setVisible(true);
+				} else {
+//					int pocision = (JF_Main.pagina_actual-1)*57 + i;
+					System.out.println("click derecho");
+				}
+
 			}
 		}
 	}
@@ -365,7 +369,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 			lbl_left_arrow.setForeground(Color.RED);
 		}
 		for(int i=0; i<57; i++) {
-			if (e.getSource() == labels[i]) labels[i].setForeground(Constans.HOJA_ROJO2);
+			if (e.getSource() == labels[i]) labels[i].setForeground(Constans.HOJA_NARANJA);
 		}
 	}
 	@Override
@@ -377,7 +381,13 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 			lbl_left_arrow.setForeground(Color.BLACK);
 		}
 		for(int i=0; i<57; i++) {
-			if (e.getSource() == labels[i]) labels[i].setForeground(Color.BLACK);
+			if (e.getSource() == labels[i]) {
+				if(labelsResaltados.contains(i)) {
+					labels[i].setForeground(Constans.HOJA_MORADO);
+				}else {
+					labels[i].setForeground(Color.BLACK);
+				}
+			}
 		}
 		
 	}
@@ -388,6 +398,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 			paint(this.getGraphics());
 			fillLabels(lista, JF_Main.pagina_actual);
 			disableArrow();
+//			labelsResaltados.clear();
 			System.out.println("Pnl_Hoja : evento_cambiado -> " + e.getPropertyName());
 		}
 	}

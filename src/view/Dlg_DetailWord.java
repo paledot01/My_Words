@@ -49,12 +49,10 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 	private Font fuente_interrogacion = new Font("DialogInput", Font.BOLD | Font.ITALIC, 20);
 	private Font fuente_ejemplo = new Font("Kristen ITC", Font.PLAIN, 14);
 
-	public static int posicionPalabra = 0;
+	public static int posicionPalabra = 0; // posicion que ocupa la palabra en la lista, para poder obtener la palabra.
 	private Word palabra;
 	private String pathImage;
 	private JLabel lbl_zoom;
-//	private String imagen2 = "C:/MyWords/imgs/fetch.jpg";
-	
 
 
 	/**
@@ -98,7 +96,6 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 		panel.add(lbl_significado);
 		
 		lbl_ejemplo = new JLabel("");
-//		lbl_ejemplo = new JLabel(palabra.getExample()); // <<<<<<<<<<<<<<< 2
 		lbl_ejemplo.setFont(fuente_ejemplo);
 		lbl_ejemplo.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_ejemplo.setBounds(17, 43, 280, 51);
@@ -112,6 +109,7 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 		panel.add(lbl_zoom);
 		
 		lbl_imagen = new JLabel("");
+		lbl_imagen.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_imagen.setBorder(new LineBorder(new Color(187, 200, 212)));
 		lbl_imagen.setBounds(16, 97, 280, 280);
 		lbl_imagen.setIcon(new ImageIcon(Dlg_DetailWord.class.getResource("/img/no_image.png"))); // <<<<<<

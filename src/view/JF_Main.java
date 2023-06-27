@@ -44,7 +44,6 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	private JLabel lbl_app_nombre;
 	private JLabel lbl_total_words;
 	private Pnl_Hoja pnl_hoja;
-	private JButton btn_grupo00;
 	private JButton btn_grupo01;
 	private JButton btn_grupo02;
 	private JButton btn_grupo03;
@@ -56,7 +55,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	private int xMouse, yMouse; // PASO 1: EVENTO 'ARRASTRAR' DE LA BARRA - Creacion de la variable
 	
 	// variables estaticas.
-	static public List<Word> lista_words = new ArrayList<Word>(); // lista grupo 0, su valor se obtiene en el metodo readFile(), del servicio.
+	//static public List<Word> lista_words = new ArrayList<Word>(); // lista grupo 0, su valor se obtiene en el metodo readFile(), del servicio.
 	static public List<Word> lista_words_grupo_01 = new ArrayList<Word>();
 	static public List<Word> lista_words_grupo_02 = new ArrayList<Word>();
 	static public List<Word> lista_words_grupo_03 = new ArrayList<Word>();
@@ -123,46 +122,39 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		contentPane.add(pnl_strip);
 		pnl_strip.setLayout(null);
 		
-		btn_grupo00 = new JButton("");
-		btn_grupo00.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_0.png")));
-		btn_grupo00.addActionListener(this);
-		btn_grupo00.setFocusable(false);
-		btn_grupo00.setBounds(1, 1, 28, 28);
-		pnl_strip.add(btn_grupo00);
-		
 		btn_grupo01 = new JButton("");
 		btn_grupo01.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_1.png")));
 		btn_grupo01.addActionListener(this);
 		btn_grupo01.setFocusable(false);
-		btn_grupo01.setBounds(29, 1, 28, 28);
+		btn_grupo01.setBounds(1, 1, 28, 28);
 		pnl_strip.add(btn_grupo01);
 		
 		btn_grupo02 = new JButton("");
 		btn_grupo02.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_2.png")));
 		btn_grupo02.addActionListener(this);
 		btn_grupo02.setFocusable(false);
-		btn_grupo02.setBounds(57, 1, 28, 28);
+		btn_grupo02.setBounds(29, 1, 28, 28);
 		pnl_strip.add(btn_grupo02);
 		
 		btn_grupo03 = new JButton("");
 		btn_grupo03.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_3.png")));
 		btn_grupo03.addActionListener(this);
 		btn_grupo03.setFocusable(false);
-		btn_grupo03.setBounds(85, 1, 28, 28);
+		btn_grupo03.setBounds(57, 1, 28, 28);
 		pnl_strip.add(btn_grupo03);
 		
 		btn_grupo04 = new JButton("");
 		btn_grupo04.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_4.png")));
 		btn_grupo04.addActionListener(this);
 		btn_grupo04.setFocusable(false);
-		btn_grupo04.setBounds(113, 1, 28, 28);
+		btn_grupo04.setBounds(85, 1, 28, 28);
 		pnl_strip.add(btn_grupo04);
 		
 		btn_grupo05 = new JButton("");
 		btn_grupo05.setIcon(new ImageIcon(JF_Main.class.getResource("/img/number_5.png")));
 		btn_grupo05.addActionListener(this);
 		btn_grupo05.setFocusable(false);
-		btn_grupo05.setBounds(141, 1, 28, 28);
+		btn_grupo05.setBounds(113, 1, 28, 28);
 		pnl_strip.add(btn_grupo05);
 		
 		pnl_inferior= new JPanel();
@@ -221,8 +213,8 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 
 		// ACCIONES INICIALES
 		servicio.readFile(); // obtenemos la lista de palabras
-		getCantidadPalabras(lista_words);
-		getCantidadPaginas(lista_words);
+		getCantidadPalabras(lista_words_grupo_01);
+		getCantidadPaginas(lista_words_grupo_01);
 		setTotalPalabras();
 		
 		pnl_hoja = new Pnl_Hoja();
@@ -247,6 +239,12 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		cantidad_palabras = list.size();
 	}
 	
+	int getCantidadPalabrasTotales() {
+		int total = 0;
+		total = lista_words_grupo_01.size() + lista_words_grupo_02.size() + lista_words_grupo_03.size() + lista_words_grupo_04.size() + lista_words_grupo_05.size();
+		return total;
+	}
+	
 	void getCantidadPaginas(List<Word> list) { // NO PUEDE SER 0
 		cantidad_paginas = (int) Math.ceil(cantidad_palabras/57.0);
 		if(cantidad_paginas == 0) cantidad_paginas = 1;
@@ -254,7 +252,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	
 	void setTotalPalabras(){
 //		String total = Integer.toString(cantidad_palabras);
-		lbl_total_words.setText("Total: " + cantidad_palabras + " words");
+		lbl_total_words.setText("Total: " + getCantidadPalabrasTotales() + " words");
 	}
 	
 	// Mostrar en el panel "p" dentro del panel principal
@@ -315,15 +313,6 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	}
 	// ============================================
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btn_grupo00 && grupoActual != 0) {
-			getCantidadPalabras(lista_words);
-			getCantidadPaginas(lista_words);
-			pagina_actual = 1;
-			Pnl_Hoja.lista = lista_words;
-			Pnl_Hoja.lbl_grupo.setText("ALL");
-			System.out.println("JF_Main: evento change");
-			grupoActual = 0;
-		}
 		if (e.getSource() == btn_grupo01 && grupoActual != 1) {
 			getCantidadPalabras(lista_words_grupo_01);
 			getCantidadPaginas(lista_words_grupo_01);
