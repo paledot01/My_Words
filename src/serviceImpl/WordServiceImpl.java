@@ -9,8 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -43,7 +41,6 @@ public class WordServiceImpl implements WordService{
 			ventSeleccion.setFileFilter(filtro);
 			ventSeleccion.setDialogTitle("Guardar Archivo");
 	        ventSeleccion.setAcceptAllFileFilterUsed(true); // true: muestra el tambien filtro de todos los tipos de archivos, false : muestra solo el filtro seleccionado
-			
 			
 			/** showDialog(componentePadre, nombreBotonAprobado) -- devuelve un numero que representa la eleccion del usuario.*/
 			if(ventSeleccion.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION){
@@ -149,15 +146,16 @@ public class WordServiceImpl implements WordService{
 	@Override
 	public void readFile() { // esto debe ejecutarse al inicio
 		Word obj;
+		FileReader fr = null;
+		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			 fr = new FileReader(file);
+			 br = new BufferedReader(fr);
 			
 			String linea = new String();
 			while (br.ready()) {
 				linea = br.readLine();
 				String s[] = linea.split(";");
-//				System.out.println("linea:" + linea);
 				obj = new Word(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5], null, Integer.parseInt(s[7]));
 //				JF_Main.lista_words.add(obj);
 				switch (s[5]) {
@@ -173,6 +171,12 @@ public class WordServiceImpl implements WordService{
 		} catch (Exception e) {
 //			e.printStackTrace();
 			System.out.println("ERROR en el metodo readFile(): " + e.getMessage());
+		}finally {
+			try {
+				fr.close();
+                br.close();
+            } catch (IOException io) {
+            }
 		}
 		System.out.println(">>< SERVICE IMPL - LEYO EL ARCHIVO FILE");
 	}

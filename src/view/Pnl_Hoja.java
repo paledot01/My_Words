@@ -12,10 +12,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-import javax.swing.text.AttributeSet.ColorAttribute;
 
 import model.Word;
-import serviceImpl.WordServiceImpl;
 import utils.Constans;
 
 import javax.swing.JLabel;

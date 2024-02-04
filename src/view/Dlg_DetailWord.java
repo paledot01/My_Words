@@ -2,41 +2,31 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 
 import model.Word;
-import serviceImpl.WordServiceImpl;
 import utils.Constans;
 import javax.swing.JLabel;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import java.awt.Cursor;
 import java.awt.Desktop;
 
 public class Dlg_DetailWord extends JDialog implements MouseListener {
+
+	private static final long serialVersionUID = 1L;
 
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lbl_fondo;
@@ -44,8 +34,8 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 	private JLabel lbl_significado;
 	private JLabel lbl_ejemplo;
 	private JLabel lbl_imagen;
-	private Font fuente_17 = new Font("Segoe Print", Font.PLAIN, 17);
-	private Font fuente_15 = new Font("Segoe Print", Font.PLAIN, 15);
+//	private Font fuente_17 = new Font("Segoe Print", Font.PLAIN, 17);
+//	private Font fuente_15 = new Font("Segoe Print", Font.PLAIN, 15);
 	private Font fuente_interrogacion = new Font("DialogInput", Font.BOLD | Font.ITALIC, 20);
 	private Font fuente_ejemplo = new Font("Kristen ITC", Font.PLAIN, 14);
 
