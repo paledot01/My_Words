@@ -49,6 +49,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	private JButton btn_grupo03;
 	private JButton btn_grupo04;
 	private JButton btn_grupo05;
+	private JButton btn_export;
 
 	// variables
 	private WordService servicio = new WordServiceImpl();
@@ -61,6 +62,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	static public List<Word> lista_words_grupo_03 = new ArrayList<Word>();
 	static public List<Word> lista_words_grupo_04 = new ArrayList<Word>();
 	static public List<Word> lista_words_grupo_05 = new ArrayList<Word>();
+	static public List<String> lista_important = new ArrayList<String>();
 	static public int cantidad_palabras = 0; // Requiere verificacion.
 	static public int cantidad_paginas = 1;
 	static public int pagina_actual = 1;
@@ -100,7 +102,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	public JF_Main() {
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 732, 562); // 660 x 600
+		setBounds(100, 100, 742, 562); // 660 x 600
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.GREEN);
 		contentPane.setBorder(new LineBorder(Constans.GRIS_80));
@@ -108,7 +110,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		contentPane.setLayout(null);
 		
 		pnl_superior = new JPanel();
-		pnl_superior.setBounds(1, 1, 730, 30);
+		pnl_superior.setBounds(1, 1, 740, 30);
 //		pnl_superior.setBorder(new LineBorder(Color.cyan));
 		pnl_superior.setBackground(Color.BLACK);
 		pnl_superior.addMouseMotionListener(this);
@@ -117,7 +119,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		contentPane.add(pnl_superior);
 		
 		pnl_strip= new JPanel();
-		pnl_strip.setBounds(1, 31, 730, 30);
+		pnl_strip.setBounds(1, 31, 740, 30);
 		pnl_strip.setBackground(Constans.HOJA_CREMA);
 		contentPane.add(pnl_strip);
 		pnl_strip.setLayout(null);
@@ -157,8 +159,14 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		btn_grupo05.setBounds(113, 1, 28, 28);
 		pnl_strip.add(btn_grupo05);
 		
+		btn_export = new JButton("");
+		btn_export.addActionListener(this);
+		btn_export.setFocusable(false);
+		btn_export.setBounds(712, 1, 28, 28);
+		pnl_strip.add(btn_export);
+		
 		pnl_inferior= new JPanel();
-		pnl_inferior.setBounds(1, 531, 730, 30);
+		pnl_inferior.setBounds(1, 531, 740, 30);
 		pnl_inferior.setBackground(Constans.HOJA_CREMA);
 		pnl_inferior.setLayout(null);
 		contentPane.add(pnl_inferior);
@@ -171,7 +179,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		lbl_total_words.setForeground(Color.BLACK);
 		
 		pnl_close = new JPanel();
-		pnl_close.setBounds(700, 0, 30, 30);
+		pnl_close.setBounds(710, 0, 30, 30);
 		pnl_close.addMouseListener(this);
 		pnl_close.setBackground(Color.BLACK);
 		pnl_close.setLayout(null);
@@ -183,7 +191,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_close.add(lbl_01);
 		
 		pnl_minimizar = new JPanel();
-		pnl_minimizar.setBounds(670, 0, 30, 30);
+		pnl_minimizar.setBounds(680, 0, 30, 30);
 		pnl_minimizar.addMouseListener(this);
 		pnl_minimizar.setBackground(Color.BLACK);
 		pnl_minimizar.setLayout(null);
@@ -206,7 +214,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 		pnl_superior.add(lbl_app_nombre);
 		
 		pnl_principal = new JPanel();
-		pnl_principal.setBounds(1, 61, 730, 470);
+		pnl_principal.setBounds(1, 61, 740, 470);
 		contentPane.add(pnl_principal);
 		
 		
@@ -246,7 +254,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	}
 	
 	void getCantidadPaginas(List<Word> list) { // NO PUEDE SER 0
-		cantidad_paginas = (int) Math.ceil(cantidad_palabras/57.0);
+		cantidad_paginas = (int) Math.ceil(cantidad_palabras/77.0);
 		if(cantidad_paginas == 0) cantidad_paginas = 1;
 	}
 	
@@ -258,7 +266,7 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 	// Mostrar en el panel "p" dentro del panel principal
 	static void MostrarEnPanelPrincipal(JPanel p){
 
-		p.setSize(730, 470);
+		p.setSize(740, 470);
 		p.setLocation(0, 0);
 		pnl_principal.removeAll();
 		pnl_principal.setLayout(null);
@@ -317,47 +325,49 @@ public class JF_Main extends JFrame implements MouseListener, ActionListener, Mo
 			getCantidadPalabras(lista_words_grupo_01);
 			getCantidadPaginas(lista_words_grupo_01);
 			pagina_actual = 1;
+			Pnl_Hoja.lbl_pagination.setText(JF_Main.pagina_actual + "/" + JF_Main.cantidad_paginas);
 			Pnl_Hoja.lista = lista_words_grupo_01;
 			Pnl_Hoja.lbl_grupo.setText("GRUPO I");
-			System.out.println("JF_Main: evento change");
 			grupoActual = 1;
 		}
 		if (e.getSource() == btn_grupo02 && grupoActual != 2) {
 			getCantidadPalabras(lista_words_grupo_02);
 			getCantidadPaginas(lista_words_grupo_02);
 			pagina_actual = 1;
+			Pnl_Hoja.lbl_pagination.setText(JF_Main.pagina_actual + "/" + JF_Main.cantidad_paginas);
 			Pnl_Hoja.lista = lista_words_grupo_02;
 			Pnl_Hoja.lbl_grupo.setText("GRUPO II");
-			System.out.println("JF_Main: evento change");
 			grupoActual = 2;
 		}
 		if (e.getSource() == btn_grupo03 && grupoActual != 3) {
 			getCantidadPalabras(lista_words_grupo_03);
 			getCantidadPaginas(lista_words_grupo_03);
 			pagina_actual = 1;
+			Pnl_Hoja.lbl_pagination.setText(JF_Main.pagina_actual + "/" + JF_Main.cantidad_paginas);
 			Pnl_Hoja.lista = lista_words_grupo_03;
 			Pnl_Hoja.lbl_grupo.setText("GRUPO III");
-			System.out.println("JF_Main: evento change");
 			grupoActual = 3;
 		}
 		if (e.getSource() == btn_grupo04 && grupoActual != 4) {
 			getCantidadPalabras(lista_words_grupo_04);
 			getCantidadPaginas(lista_words_grupo_04);
 			pagina_actual = 1;
+			Pnl_Hoja.lbl_pagination.setText(JF_Main.pagina_actual + "/" + JF_Main.cantidad_paginas);
 			Pnl_Hoja.lista = lista_words_grupo_04;
 			Pnl_Hoja.lbl_grupo.setText("GRUPO IV");
-			System.out.println("JF_Main: evento change");
 			grupoActual = 4;
 		}
 		if (e.getSource() == btn_grupo05 && grupoActual != 5) {
 			getCantidadPalabras(lista_words_grupo_05);
 			getCantidadPaginas(lista_words_grupo_05);
 			pagina_actual = 1;
+			Pnl_Hoja.lbl_pagination.setText(JF_Main.pagina_actual + "/" + JF_Main.cantidad_paginas);
 			Pnl_Hoja.lista = lista_words_grupo_05;
 			Pnl_Hoja.lbl_grupo.setText("GRUPO V");
-			System.out.println("JF_Main: evento change");
 			grupoActual = 5;
 		}
+		if (e.getSource() == btn_export) {
+			servicio.export();
+		}
 	}
-
 }

@@ -5,49 +5,25 @@ import java.util.Date;
 public class Word {
 
 	// Atributos
-	private Integer id;
 	private String word; // palabra
 	private String meaning; // significado
 	private String example;
 	private String image;
+	private String group; //
+	private String important; // importancia
 	//private Integer number; // cantidad de palabras
-	private String grupo; //
-	private Date date;
-	private int value; // importancia
 	
 	// Constructores
 	public Word() {}
 
-	public Word(Integer id, String word, String meaning, String example, String image, String grupo, Date date,
-			int value) {
-		super();
-		this.id = id;
-		this.word = word;
-		this.meaning = meaning;
-		this.example = example;
-		this.image = image;
-		this.grupo = grupo;
-		this.date = date;
-		this.value = value;
-	}
-
-	public Word(String word, String meaning, String example, String image, String grupo, Date date, int value) {
+	public Word(String word, String meaning, String example, String image, String group, String important) {
 		super();
 		this.word = word;
 		this.meaning = meaning;
 		this.example = example;
 		this.image = image;
-		this.grupo = grupo;
-		this.date = date;
-		this.value = value;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
+		this.group = group;
+		this.important = important;
 	}
 
 	public String getWord() {
@@ -82,40 +58,25 @@ public class Word {
 		this.image = image;
 	}
 
-	public String getGrupo() {
-		return grupo;
+	public String getGroup() {
+		return group;
 	}
 
-	public void setGrupo(String grupo) {
-		this.grupo = grupo;
+	public void setGroup(String group) {
+		this.group = group;
 	}
 
-	public Date getDate() {
-		return date;
+	public String getImportant() {
+		return important;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
+	public void setImportant(String important) {
+		this.important = important;
 	}
 
 	@Override
 	public String toString() {
-		return "Word [id=" + id + ", word=" + word + ", meaning=" + meaning + ", example=" + example + ", image="
-				+ image + ", grupo=" + grupo + ", date=" + date + ", value=" + value + "]";
+		return word + ";" + meaning + ";" + example + ";" + image + ";" + group + ";" + important;
 	}
-	
-
-	
-	
-	
-	
 	
 }

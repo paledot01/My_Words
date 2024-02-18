@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,13 +22,11 @@ import view.JF_Main;
 
 public class WordServiceImpl implements WordService{
 
-	// Constantes []
+	// Constantes
 	final String file = Constans.PATH_FILE;
-
-	
 	
 	@Override
-	public int save(Word w) {
+	public int save(Word w) { // guardar la palabra en el archivo de texto
 		int respuesta = -1;
 		
 		try {
@@ -73,6 +73,53 @@ public class WordServiceImpl implements WordService{
 			System.out.println("Error en la sentencia save() --> " + e.getMessage());
 		}catch (Exception e) {
 			System.out.println("Error en la sentencia save() --> " + e.getMessage());
+		}
+		
+		return respuesta;
+	}
+	
+	
+	@Override
+	public int export() {
+		int respuesta = -1;
+		
+		try {
+			File archivo;
+			FileOutputStream archivoSalida = null;
+			
+			JFileChooser ventSeleccion = new JFileChooser();
+			FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto", "txt");
+			ventSeleccion.setFileFilter(filtro);
+			ventSeleccion.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop"));
+			ventSeleccion.setDialogTitle("Guardar Archivo");
+	        ventSeleccion.setAcceptAllFileFilterUsed(true); // true: muestra el tambien filtro de todos los tipos de archivos, false : muestra solo el filtro seleccionado
+			
+			/** showDialog(componentePadre, nombreBotonAprobado) -- devuelve un numero que representa la eleccion del usuario.*/
+			if(ventSeleccion.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION){
+				
+				// toString(), transforma el archivo seleccionado en un cadena de la ruta del archivo, a�adiendole el formarto.
+				String ruta = ventSeleccion.getSelectedFile().toString().concat(".txt"); 
+				archivo = new File(ruta); //archivo = ventSeleccion.getSelectedFile();
+
+				String data = "";
+				for (String linea : JF_Main.lista_important) {
+                    data += linea + "\n";
+				}
+				
+				byte[] dataByte = data.getBytes();
+				
+				archivoSalida = new FileOutputStream(archivo); //<<<
+				archivoSalida.write(dataByte); // <<<<
+				archivoSalida.close();
+				respuesta = 1;
+			}
+			
+		}catch (FileNotFoundException e) {
+			System.out.println("Error en la sentencia export() --> " + e.getMessage());
+		}catch (IOException e) {
+			System.out.println("Error en la sentencia export() --> " + e.getMessage());
+		}catch (Exception e) {
+			System.out.println("Error en la sentencia export() --> " + e.getMessage());
 		}
 		
 		return respuesta;
@@ -156,9 +203,10 @@ public class WordServiceImpl implements WordService{
 			while (br.ready()) {
 				linea = br.readLine();
 				String s[] = linea.split(";");
-				obj = new Word(Integer.parseInt(s[0]), s[1], s[2], s[3], s[4], s[5], null, Integer.parseInt(s[7]));
+				if(s[5].equals("1")) JF_Main.lista_important.add(s[0] + "-------------------------" + s[1]);
+				obj = new Word(s[0], s[1], s[2], s[3], s[4], s[5]);
 //				JF_Main.lista_words.add(obj);
-				switch (s[5]) {
+				switch (obj.getGroup()) {
 				case "g1":JF_Main.lista_words_grupo_01.add(obj);break;
 				case "g2":JF_Main.lista_words_grupo_02.add(obj);break;
 				case "g3":JF_Main.lista_words_grupo_03.add(obj);break;
@@ -180,6 +228,8 @@ public class WordServiceImpl implements WordService{
 		}
 		System.out.println(">>< SERVICE IMPL - LEYO EL ARCHIVO FILE");
 	}
+
+
 
 
 	
