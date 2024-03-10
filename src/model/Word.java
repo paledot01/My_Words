@@ -10,7 +10,7 @@ public class Word {
 	private String example;
 	private String image;
 	private String group; //
-	private String important; // importancia
+	private String important; // importancia, [0,1]
 	//private Integer number; // cantidad de palabras
 	
 	// Constructores

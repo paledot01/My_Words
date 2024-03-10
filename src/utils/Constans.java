@@ -6,7 +6,7 @@ public class Constans {
 
 //	public static final String PATH_FILE = "C:/Users/KEVIN/Desktop/file.txt";
 	public static final String PATH_FILE = "C:/MyWords/file.txt";
-	public static final String PATH_IMGS = "C:/MyWords/imgs/";
+	public static final String PATH_IMAGES = "C:/MyWords/imgs/";
 	public static final Color GRIS_40= new Color(40, 40, 40); // border
 	public static final Color GRIS_80= new Color(80, 80, 80); // border
 	public static final Color GRIS_120= new Color(120, 120, 120); // border

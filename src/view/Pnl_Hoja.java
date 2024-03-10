@@ -172,7 +172,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 		
 		createLabels();
 		fillLabels(lista, 1); // inicia en pagina 1
-		disableArrow();
+		enableAndDisableArrow();
 		System.out.println("<<< JPANEL HOJA [END] - EJECUCION DEL CONSTRUCTOR");
 	}
 	
@@ -230,7 +230,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 	}
 	
 	
-	public void disableArrow() {
+	public void enableAndDisableArrow() {
 		if(JF_Main.pagina_actual == 1) {
 			lbl_left_arrow.setEnabled(false);
 		} else {
@@ -359,14 +359,14 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 			clearLabels();
 			paint(this.getGraphics()); // repinta los numeros
 			fillLabels(lista, JF_Main.pagina_actual);
-			disableArrow();
+			enableAndDisableArrow();
 		}
 		if (e.getSource() == lbl_left_arrow && lbl_left_arrow.isEnabled()) {
 			JF_Main.pagina_actual--;
 			lbl_pagination.setText(JF_Main.pagina_actual + "/" + JF_Main.cantidad_paginas);
 			paint(this.getGraphics());
 			fillLabels(lista, JF_Main.pagina_actual);
-			disableArrow();
+			enableAndDisableArrow();
 		}
 		for(int i=0; i<77; i++) {
 			if (e.getSource() == labels[i] && labels[i].isEnabled()) { // se desabilita para que los labels vacios no funcionen.
@@ -423,7 +423,7 @@ public class Pnl_Hoja extends JPanel implements MouseListener, PropertyChangeLis
 			clearLabels();
 			paint(this.getGraphics());
 			fillLabels(lista, JF_Main.pagina_actual);
-			disableArrow();
+			enableAndDisableArrow();
 //			labelsResaltados.clear();
 			System.out.println("Pnl_Hoja : evento_cambiado -> " + e.getPropertyName());
 		}

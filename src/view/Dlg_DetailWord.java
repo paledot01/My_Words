@@ -124,7 +124,7 @@ public class Dlg_DetailWord extends JDialog implements MouseListener {
 		palabra = Pnl_Hoja.lista.get(posicionPalabra);
 	}
 	void getPathImage() {
-		pathImage = Constans.PATH_IMGS + palabra.getImage();
+		pathImage = Constans.PATH_IMAGES + palabra.getImage();
 	}
 	public void setTitle() {
 		setTitle(palabra.getWord()); // <<<<<<<<<<<<<<< 1
